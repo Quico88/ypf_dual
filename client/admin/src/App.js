@@ -3,7 +3,7 @@ import { Button } from "antd";
 import axios from "axios";
 import { useState } from "react";
 
-axios.defaults.baseURL = "http://localhost:5000/";
+axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
 function App() {
   const [key, setKey] = useState(0);
