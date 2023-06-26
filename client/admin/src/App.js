@@ -2,11 +2,9 @@ import "./App.css";
 import { Button } from "antd";
 import axios from "axios";
 import { useState } from "react";
+import Counter from "./components/counter";
 
-axios.defaults.baseURL =
-  process.env.NODE_ENV === "production"
-    ? process.env.REACT_APP_API_URL
-    : process.env.REACT_APP_API_URL_DEV;
+axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
 function App() {
   const [key, setKey] = useState(0);
@@ -28,6 +26,7 @@ function App() {
       {key ? (
         <text className='text-sm mt-4'>La clave generada es: {key}</text>
       ) : null}
+      <Counter />
     </div>
   );
 }
