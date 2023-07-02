@@ -1,3 +1,4 @@
+const moment = require("moment/moment");
 const { Carwash } = require("../db");
 const { Op } = require("sequelize");
 
@@ -49,4 +50,21 @@ const generateRandomNumber = () => {
   return key;
 };
 
-module.exports = { checkCarWashKey, generateRandomNumber, generateKey };
+const countGeneratedKeys = async () => {
+  const count = await Carwash.count({
+    where: {
+      createdAt: {
+        [Op.gt]: moment("2023-07"),
+      },
+    },
+  });
+
+  return count;
+};
+
+module.exports = {
+  checkCarWashKey,
+  generateRandomNumber,
+  generateKey,
+  countGeneratedKeys,
+};

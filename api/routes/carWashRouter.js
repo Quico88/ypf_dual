@@ -3,6 +3,7 @@ const {
   checkCarWashKey,
   generateRandomKey,
   generateKey,
+  countGeneratedKeys,
 } = require("../controllers");
 
 const carWashRouter = Router();
@@ -32,6 +33,20 @@ carWashRouter.get("/key/generate", async (req, res) => {
       res.status(200).send({ key });
     } else {
       res.status(404).send("Hubo un error al generar la clave");
+    }
+  } catch (e) {
+    res.status(404).json({ error: e.message });
+  }
+});
+
+carWashRouter.get("/key/counter", async (req, res) => {
+  try {
+    const count = await countGeneratedKeys();
+    console.log("El acumulado es", count);
+    if (count) {
+      res.status(200).send({ count });
+    } else {
+      res.status(404).send("Hubo un error al contar las claves");
     }
   } catch (e) {
     res.status(404).json({ error: e.message });
