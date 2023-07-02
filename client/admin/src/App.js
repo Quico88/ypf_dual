@@ -4,7 +4,7 @@ import axios from "axios";
 import { useState } from "react";
 import Counter from "./components/counter";
 
-axios.defaults.baseURL = process.env.REACT_APP_API_URL;
+axios.defaults.baseURL = process.env.REACT_APP_API || "http://localhost:5000";
 
 function App() {
   const [key, setKey] = useState(0);
