@@ -71,10 +71,11 @@ const countGeneratedKeys = async () => {
       ? yesterday.hours(14).minutes(0).seconds(0)
       : moment({ hour: 0, minute: 0, seconds: 0 });
 
+  const utcDifference = process.env.NODE_ENV === "production" ? 3 : 0;
   const MTDCount = await Carwash.count({
     where: {
       createdAt: {
-        [Op.gt]: monthStart,
+        [Op.gt]: monthStart.add(utcDifference, "hours"),
       },
     },
   });
@@ -82,8 +83,8 @@ const countGeneratedKeys = async () => {
   const prevShiftCount = await Carwash.count({
     where: {
       createdAt: {
-        [Op.gt]: prevShiftStarts,
-        [Op.lt]: currentShiftStarts,
+        [Op.gt]: prevShiftStarts.add(utcDifference, "hours"),
+        [Op.lt]: currentShiftStarts.add(utcDifference, "hours"),
       },
     },
   });
@@ -91,7 +92,7 @@ const countGeneratedKeys = async () => {
   const currentShiftCount = await Carwash.count({
     where: {
       createdAt: {
-        [Op.gt]: currentShiftStarts,
+        [Op.gt]: currentShiftStarts.add(utcDifference, "hours"),
       },
     },
   });
