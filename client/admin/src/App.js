@@ -1,5 +1,5 @@
 import "./App.css";
-import { Button } from "antd";
+import { Button, Modal } from "antd";
 import axios from "axios";
 import { useState } from "react";
 import Counter from "./components/counter";
@@ -8,14 +8,20 @@ axios.defaults.baseURL = process.env.REACT_APP_API || "http://localhost:5000";
 
 function App() {
   const [key, setKey] = useState(0);
+  const [showCounterModal, setShowCounterModal] = useState(false);
+
   const handleClick = async () => {
     const { data } = await axios.get("carwash/key/generate");
     setKey(parseInt(data.key));
     console.log("key: ", key);
   };
 
+  const toggleModal = () => {
+    setShowCounterModal(!showCounterModal);
+  };
+
   return (
-    <div className='flex flex-col justify-center items-center'>
+    <div className='flex flex-col justify-center items-center h-full'>
       <div className='text-4xl m-6 text-blue-500 text-center font-bold'>
         YPF DUAL
       </div>
@@ -25,8 +31,21 @@ function App() {
       </Button>
       {key ? (
         <text className='text-sm mt-4'>La clave generada es: {key}</text>
-      ) : null}
-      <Counter />
+      ) : (
+        ""
+      )}
+      <Button size='small' className='mt-16' onClick={toggleModal}>
+        Aforo
+      </Button>
+      <Modal
+        title='Aforo acumulado'
+        className='text-center'
+        open={showCounterModal}
+        onCancel={toggleModal}
+        footer={null}
+      >
+        <Counter />
+      </Modal>
     </div>
   );
 }
