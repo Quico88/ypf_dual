@@ -44,6 +44,7 @@ function App() {
         open={showCounterModal}
         onCancel={toggleModal}
         footer={null}
+        showCounterModal={showCounterModal}
       >
         <Counter />
       </Modal>
