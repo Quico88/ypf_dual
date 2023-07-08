@@ -43,7 +43,6 @@ carWashRouter.get("/key/counter", async (req, res) => {
   try {
     const { MTDCount, currentShiftCount, prevShiftCount } =
       await countGeneratedKeys();
-    console.log("El acumulado es", MTDCount, currentShiftCount, prevShiftCount);
     res.status(200).send({ MTDCount, currentShiftCount, prevShiftCount });
   } catch (e) {
     res.status(404).json({ error: e.message });
