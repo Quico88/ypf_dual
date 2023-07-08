@@ -1,5 +1,5 @@
 import "./App.css";
-import { Button, Modal } from "antd";
+import { Button, Modal, Popconfirm } from "antd";
 import axios from "axios";
 import { useState } from "react";
 import Counter from "./components/counter";
@@ -27,9 +27,16 @@ function App() {
         YPF DUAL
       </div>
       <text className='mt-6 font-bold'>Lavadero</text>
-      <Button className='mt-2' onClick={handleClick}>
-        Generar Clave
-      </Button>
+      <Popconfirm
+        className='text-black'
+        title='Generar clave'
+        description='Estás seguro/a que querés generar una nueva clave?'
+        okText='Si'
+        cancelText='No'
+        onConfirm={handleClick}
+      >
+        <Button className='mt-2'>Generar Clave</Button>
+      </Popconfirm>
       {key ? (
         <text className='text-sm mt-4'>La clave generada es: {key}</text>
       ) : (
