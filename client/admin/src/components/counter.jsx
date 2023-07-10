@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Col, Row } from 'antd';
 import moment from 'moment';
 
-const Counter = (showCounterModal)=> {
+const Counter = ({showCounterModal, url})=> {
 
     const [MTDCount, setMTDCount] = useState(0);
     const [currentShiftCount, setCurrentShiftCount] = useState(0);
@@ -17,16 +17,18 @@ const Counter = (showCounterModal)=> {
       const hour = moment().hour();
       const currentShift = hour < 14 ? SHIFTS.morning : SHIFTS.afternoon;
 
+      const endPoint = `${url}/key/counter`;
+
     useEffect(()=> {
        if(showCounterModal){ const countKeys = async () =>{
-            let { data: { MTDCount, currentShiftCount, prevShiftCount } } = await axios.get("carwash/key/counter");
+            let { data: { MTDCount, currentShiftCount, prevShiftCount } } = await axios.get(endPoint);
             setMTDCount(MTDCount);
             setCurrentShiftCount(currentShiftCount);
             setPrevShiftCount(prevShiftCount);
         }
         countKeys().catch(e => console.log(e))
 }
-    },[showCounterModal])
+    },[showCounterModal, endPoint])
 
     return (
         <Row className="mt-2 flex flex-col justify-center items-center border-2 border-blue-200 rounded-lg">
