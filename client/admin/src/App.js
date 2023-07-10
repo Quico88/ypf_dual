@@ -31,8 +31,9 @@ function App() {
         className='text-black'
         title='Generar clave'
         description='Estás seguro/a que querés generar una nueva clave?'
-        okText='Si'
+        okText='Sí'
         cancelText='No'
+        okType='default'
         onConfirm={handleClick}
       >
         <Button className='mt-2'>Generar Clave</Button>
