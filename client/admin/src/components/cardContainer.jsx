@@ -2,7 +2,7 @@ import DeviceCard from "./deviceCard";
 
 const CardContainer = ()=> {
 
-    const devices = [ { name: "Lavadero" , url: "carwash"}, { name: "Lavadero" , url: "carwash"}, { name: "Lavadero" , url: "carwash"}, { name: "Lavadero" , url: "carwash"}]
+    const devices = [ { name: "Lavadero" , url: "carwash"}]
 
 
     return (
