@@ -65,7 +65,6 @@ const countGeneratedKeys = async () => {
     .subtract(1, "days");
   const monthStart = moment({ day: 1, hour: 0, minute: 0, seconds: 0 });
   const hour = now.hour();
-  console.log("la hora en el back es", hour);
   const currentShift = hour < PMStart ? SHIFTS.morning : SHIFTS.afternoon;
   const currentShiftStarts =
     currentShift === SHIFTS.morning
@@ -101,14 +100,6 @@ const countGeneratedKeys = async () => {
       },
     },
   });
-
-  console.log(
-    "los shifts ",
-    currentShift,
-    prevShiftStarts,
-    currentShiftStarts,
-    now
-  );
 
   return { MTDCount, prevShiftCount, currentShiftCount };
 };
