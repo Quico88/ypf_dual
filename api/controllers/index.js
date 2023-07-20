@@ -56,27 +56,33 @@ const generateRandomNumber = () => {
 };
 
 const countGeneratedKeys = async () => {
+  const utcDifference = process.env.NODE_ENV === "production" ? 3 : 0;
   const now = moment();
-  const yesterday = now.subtract(1, "days");
+  const yesterday = moment()
+    .subtract(utcDifference, "hours")
+    .subtract(1, "days");
   const monthStart = moment({ day: 1, hour: 0, minute: 0, seconds: 0 });
   const hour = now.hour();
   console.log("la hora en el back es", hour);
-  const currentShift = hour < 14 ? SHIFTS.morning : SHIFTS.afternoon;
+  const currentShift =
+    hour < 14 + utcDifference ? SHIFTS.morning : SHIFTS.afternoon;
   const currentShiftStarts =
     currentShift === SHIFTS.morning
-      ? moment({ hour: 0, minute: 0, seconds: 0 })
-      : moment({ hour: 14, minute: 0, seconds: 0 });
+      ? moment({ hour: 0 + utcDifference, minute: 0, seconds: 0 })
+      : moment({ hour: 14 + utcDifference, minute: 0, seconds: 0 });
 
   const prevShiftStarts =
     currentShift === SHIFTS.morning
-      ? yesterday.hours(14).minutes(0).seconds(0)
-      : moment({ hour: 0, minute: 0, seconds: 0 });
+      ? yesterday
+          .hours(14 + utcDifference)
+          .minutes(0)
+          .seconds(0)
+      : moment({ hour: 0 + utcDifference, minute: 0, seconds: 0 });
 
-  const utcDifference = process.env.NODE_ENV === "production" ? 3 : 0;
   const MTDCount = await Carwash.count({
     where: {
       createdAt: {
-        [Op.gt]: monthStart.add(utcDifference, "hours"),
+        [Op.gt]: monthStart,
       },
     },
   });
@@ -84,8 +90,8 @@ const countGeneratedKeys = async () => {
   const prevShiftCount = await Carwash.count({
     where: {
       createdAt: {
-        [Op.gt]: prevShiftStarts.add(utcDifference, "hours"),
-        [Op.lt]: currentShiftStarts.add(utcDifference, "hours"),
+        [Op.gt]: prevShiftStarts,
+        [Op.lt]: currentShiftStarts,
       },
     },
   });
@@ -93,7 +99,7 @@ const countGeneratedKeys = async () => {
   const currentShiftCount = await Carwash.count({
     where: {
       createdAt: {
-        [Op.gt]: currentShiftStarts.add(utcDifference, "hours"),
+        [Op.gt]: currentShiftStarts,
       },
     },
   });
