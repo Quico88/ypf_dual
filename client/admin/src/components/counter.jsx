@@ -1,12 +1,7 @@
 import { Col, Row } from "antd";
 import moment from "moment";
 
-const Counter = ({
-  showCounterModal,
-  MTDCount,
-  currentShiftCount,
-  prevShiftCount,
-}) => {
+const Counter = ({ MTDCount, currentShiftCount, prevShiftCount }) => {
   const SHIFTS = {
     morning: "Mañana",
     afternoon: "Tarde",
@@ -14,6 +9,8 @@ const Counter = ({
 
   const hour = moment().hour();
   const currentShift = hour < 14 ? SHIFTS.morning : SHIFTS.afternoon;
+
+  console.log("la hora es ", hour);
 
   return (
     <Row className='mt-2 flex flex-col justify-center items-center border-2 border-blue-200 rounded-lg'>
