@@ -63,10 +63,7 @@ const countGeneratedKeys = async () => {
   const yesterday = moment()
     .subtract(utcDifference, "hours")
     .subtract(1, "days");
-  const monthStart = moment.subtract(
-    utcDifference,
-    "hours"
-  )({ day: 1, hour: 0, minute: 0, seconds: 0 });
+  const monthStart = moment({ day: 1, hour: 0, minute: 0, seconds: 0 });
   const hour = now.hour();
   console.log("la hora en el back es", hour);
   const currentShift = hour < PMStart ? SHIFTS.morning : SHIFTS.afternoon;
