@@ -57,27 +57,28 @@ const generateRandomNumber = () => {
 
 const countGeneratedKeys = async () => {
   const utcDifference = process.env.NODE_ENV === "production" ? 3 : 0;
+  const AMStart = process.env.NODE_ENV === "production" ? 3 : 0;
+  const PMStart = process.env.NODE_ENV === "production" ? 17 : 14;
   const now = moment();
   const yesterday = moment()
     .subtract(utcDifference, "hours")
     .subtract(1, "days");
-  const monthStart = moment({ day: 1, hour: 0, minute: 0, seconds: 0 });
+  const monthStart = moment.subtract(
+    utcDifference,
+    "hours"
+  )({ day: 1, hour: 0, minute: 0, seconds: 0 });
   const hour = now.hour();
   console.log("la hora en el back es", hour);
-  const currentShift =
-    hour < 14 + utcDifference ? SHIFTS.morning : SHIFTS.afternoon;
+  const currentShift = hour < PMStart ? SHIFTS.morning : SHIFTS.afternoon;
   const currentShiftStarts =
     currentShift === SHIFTS.morning
-      ? moment({ hour: 0 + utcDifference, minute: 0, seconds: 0 })
-      : moment({ hour: 14 + utcDifference, minute: 0, seconds: 0 });
+      ? moment({ hour: AMStart, minute: 0, seconds: 0 })
+      : moment({ hour: PMStart, minute: 0, seconds: 0 });
 
   const prevShiftStarts =
     currentShift === SHIFTS.morning
-      ? yesterday
-          .hours(14 + utcDifference)
-          .minutes(0)
-          .seconds(0)
-      : moment({ hour: 0 + utcDifference, minute: 0, seconds: 0 });
+      ? yesterday.hours(PMStart).minutes(0).seconds(0)
+      : moment({ hour: AMStart, minute: 0, seconds: 0 });
 
   const MTDCount = await Carwash.count({
     where: {
