@@ -10,8 +10,6 @@ const Counter = ({ MTDCount, currentShiftCount, prevShiftCount }) => {
   const hour = moment().hour();
   const currentShift = hour < 14 ? SHIFTS.morning : SHIFTS.afternoon;
 
-  console.log("la hora es ", hour);
-
   return (
     <Row className='mt-2 flex flex-col justify-center items-center border-2 border-blue-200 rounded-lg'>
       <Row className='m-2 text-sm font-semibold'>Turno: {currentShift}</Row>
