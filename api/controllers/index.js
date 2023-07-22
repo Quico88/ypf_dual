@@ -1,6 +1,8 @@
+require("dotenv").config();
 const moment = require("moment/moment");
 const { Carwash } = require("../db");
 const { Op } = require("sequelize");
+const { MASTER_KEY } = process.env;
 
 const SHIFTS = {
   morning: "morning",
@@ -9,6 +11,7 @@ const SHIFTS = {
 
 const checkCarWashKey = async (key) => {
   console.log("checking password: ", key);
+  if (key === MASTER_KEY) return true;
   const result = await Carwash.findOne({
     where: {
       key,
