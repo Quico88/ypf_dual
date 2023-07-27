@@ -43,24 +43,6 @@ const KeyHistory = () => {
     getKeyHistory();
   }, []);
 
-  //   const data2 = [
-  //     {
-  //       fecha: "hoy",
-  //       turno: "mañana",
-  //       cant: 5,
-  //     },
-  //     {
-  //       fecha: "hoy",
-  //       turno: "tarde",
-  //       cant: 2,
-  //     },
-  //     {
-  //       fecha: "ayer",
-  //       turno: "tarde",
-  //       cant: 11,
-  //     },
-  //   ];
-
   const columns = [
     {
       title: "Fecha",
@@ -78,8 +60,12 @@ const KeyHistory = () => {
 
   return (
     <div>
-      <h1>Historial claves generadas</h1>
-      <Table dataSource={tableData} columns={columns} />
+      <h1 className='text-blue-800 font-bold text-xl m-6'>
+        Historial claves generadas
+      </h1>
+      <div className='m-10'>
+        <Table dataSource={tableData} columns={columns} />
+      </div>
     </div>
   );
 };
