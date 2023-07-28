@@ -58,6 +58,19 @@ const generateRandomNumber = () => {
   return key;
 };
 
+const bringKeyCreationHisotry = async () => {
+  const monthsOfHistory = 2;
+  const data = await Carwash.findAll({
+    where: {
+      createdAt: {
+        [Op.gt]: moment().subtract(monthsOfHistory, "months"),
+      },
+    },
+    attributes: ["createdAt"],
+  });
+  return data;
+};
+
 const countGeneratedKeys = async () => {
   const utcDifference = process.env.NODE_ENV === "production" ? 3 : 0;
   const AMStart = process.env.NODE_ENV === "production" ? 3 : 0;
@@ -112,4 +125,5 @@ module.exports = {
   generateRandomNumber,
   generateKey,
   countGeneratedKeys,
+  bringKeyCreationHisotry,
 };
