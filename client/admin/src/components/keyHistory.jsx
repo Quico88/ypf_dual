@@ -2,21 +2,26 @@ import { Table } from "antd";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import moment from "moment";
+import { useParams } from "react-router-dom";
 
 const KeyHistory = () => {
   const [tableData, setTableData] = useState([]);
 
+  const { device } = useParams();
+
+  const utcDifference = process.env.REACT_APP_UTC_DIF || 0;
+
   const getKeyHistory = async () => {
     const {
       data: { keyHistory },
-    } = await axios.get("carwash/key/history");
+    } = await axios.get(`${device}/key/history`);
 
     const processedData = keyHistory.map((row) =>
       moment(row.createdAt)
+        .subtract(utcDifference, "hours")
         .format("DD/MM/YYYY")
         .concat("_", moment(row.createdAt).hour() > 14 ? "tarde" : "mañana")
     );
-    console.log("processedData", processedData);
 
     const counts = {};
 
@@ -60,6 +65,9 @@ const KeyHistory = () => {
 
   return (
     <div>
+      <div className='text-4xl m-6 text-blue-500 text-center font-bold'>
+        YPF DUAL
+      </div>
       <h1 className='text-blue-800 font-bold text-xl m-6'>
         Historial claves generadas
       </h1>
