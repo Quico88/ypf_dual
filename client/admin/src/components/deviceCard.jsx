@@ -39,7 +39,7 @@ const DeviceCard = ({ name, url }) => {
       <text className='mt-6 font-bold'>{name}</text>
       <Popconfirm
         className='text-black'
-        title='Generar clave'
+        title={`Generar clave ${name}`}
         description='Estás seguro/a que querés generar una nueva clave?'
         okText='Sí'
         cancelText='No'
