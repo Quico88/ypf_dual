@@ -6,16 +6,16 @@ const {
   checkKey,
 } = require("../controllers");
 
-const carWashRouter = Router();
-const { Carwash } = require("../db");
+const vacuumRouter = Router();
+const { Vacuum } = require("../db");
 
-module.exports = carWashRouter;
+module.exports = vacuumRouter;
 
-carWashRouter.get("/:key", async (req, res) => {
+vacuumRouter.get("/:key", async (req, res) => {
   const { key } = req.params;
   console.log(key);
   try {
-    if (await checkKey(key, Carwash)) {
+    if (await checkKey(key, Vacuum)) {
       res.status(200).send("correct password");
     } else {
       res.status(404).send("password not found");
@@ -25,10 +25,10 @@ carWashRouter.get("/:key", async (req, res) => {
   }
 });
 
-carWashRouter.get("/key/generate", async (req, res) => {
+vacuumRouter.get("/key/generate", async (req, res) => {
   console.log("generando clave");
   try {
-    const key = await generateKey(Carwash);
+    const key = await generateKey(Vacuum);
     console.log("la clave es", key);
     if (key) {
       res.status(200).send({ key });
@@ -40,19 +40,19 @@ carWashRouter.get("/key/generate", async (req, res) => {
   }
 });
 
-carWashRouter.get("/key/counter", async (req, res) => {
+vacuumRouter.get("/key/counter", async (req, res) => {
   try {
     const { MTDCount, currentShiftCount, prevShiftCount } =
-      await countGeneratedKeys(Carwash);
+      await countGeneratedKeys(Vacuum);
     res.status(200).send({ MTDCount, currentShiftCount, prevShiftCount });
   } catch (e) {
     res.status(404).json({ error: e.message });
   }
 });
 
-carWashRouter.get("/key/history", async (req, res) => {
+vacuumRouter.get("/key/history", async (req, res) => {
   try {
-    const keyHistory = await bringKeyCreationHisotry(Carwash);
+    const keyHistory = await bringKeyCreationHisotry(Vacuum);
     if (keyHistory) {
       res.status(200).send({ keyHistory });
     } else {

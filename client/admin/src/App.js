@@ -3,6 +3,12 @@ import "./App.css";
 import Home from "./components/home";
 import KeyHistory from "./components/keyHistory";
 
+export const devices = [
+  { name: "Lavadero", url: "carwash" },
+  // { name: "Inflador", url: "inflator" },
+  // { name: "Aspiradora", url: "vacuum" },
+];
+
 function App() {
   return (
     <div className='App'>

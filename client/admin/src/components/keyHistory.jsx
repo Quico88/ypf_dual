@@ -1,8 +1,9 @@
-import { Table } from "antd";
+import { Button, Dropdown, Table } from "antd";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import moment from "moment";
 import { useParams } from "react-router-dom";
+import { devices } from "../App";
 
 const KeyHistory = () => {
   const [tableData, setTableData] = useState([]);
@@ -63,6 +64,13 @@ const KeyHistory = () => {
     },
   ];
 
+  const items = devices.map((elem) => ({
+    key: elem.url,
+    label: <a href={`/admin/history/${elem.url}`}>{elem.name}</a>,
+  }));
+
+  const name = devices.find((elem) => elem.url === device).name;
+
   return (
     <div>
       <div className='text-4xl m-6 text-blue-500 text-center font-bold'>
@@ -71,6 +79,15 @@ const KeyHistory = () => {
       <h1 className='text-blue-800 font-bold text-xl m-6'>
         Historial claves generadas
       </h1>
+      <Dropdown
+        menu={{
+          items,
+        }}
+        placement='bottom'
+        arrow
+      >
+        <Button>{name}</Button>
+      </Dropdown>
       <div className='m-10'>
         <Table dataSource={tableData} columns={columns} />
       </div>
