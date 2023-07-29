@@ -1,6 +1,5 @@
 require("dotenv").config();
 const moment = require("moment/moment");
-const { Carwash } = require("../db");
 const { Op } = require("sequelize");
 const { MASTER_KEY } = process.env;
 
@@ -9,10 +8,10 @@ const SHIFTS = {
   afternoon: "afternoon",
 };
 
-const checkCarWashKey = async (key) => {
+const checkKey = async (key, deviceData) => {
   console.log("checking password: ", key);
   if (key === MASTER_KEY) return true;
-  const result = await Carwash.findOne({
+  const result = await deviceData.findOne({
     where: {
       key,
       used: false,
@@ -22,7 +21,7 @@ const checkCarWashKey = async (key) => {
     },
   });
   if (result) {
-    await Carwash.update(
+    await deviceData.update(
       {
         used: true,
       },
@@ -36,13 +35,13 @@ const checkCarWashKey = async (key) => {
   } else return false;
 };
 
-const generateKey = async () => {
+const generateKey = async (deviceData) => {
   let key = generateRandomNumber();
   const now = new Date();
   const valid_time = 3600 * 24 * 1000 * 1; // 1 day
   const expires_at = now.getTime() + valid_time;
   try {
-    result = await Carwash.create({
+    result = await deviceData.create({
       key,
       expires_at,
     });
@@ -58,9 +57,9 @@ const generateRandomNumber = () => {
   return key;
 };
 
-const bringKeyCreationHisotry = async () => {
+const bringKeyCreationHisotry = async (deviceData) => {
   const monthsOfHistory = 2;
-  const data = await Carwash.findAll({
+  const data = await deviceData.findAll({
     where: {
       createdAt: {
         [Op.gt]: moment().subtract(monthsOfHistory, "months"),
@@ -71,7 +70,7 @@ const bringKeyCreationHisotry = async () => {
   return data;
 };
 
-const countGeneratedKeys = async () => {
+const countGeneratedKeys = async (deviceData) => {
   const utcDifference = process.env.NODE_ENV === "production" ? 3 : 0;
   const AMStart = process.env.NODE_ENV === "production" ? 3 : 0;
   const PMStart = process.env.NODE_ENV === "production" ? 17 : 14;
@@ -92,7 +91,7 @@ const countGeneratedKeys = async () => {
       ? yesterday.hours(PMStart).minutes(0).seconds(0)
       : moment({ hour: AMStart, minute: 0, seconds: 0 });
 
-  const MTDCount = await Carwash.count({
+  const MTDCount = await deviceData.count({
     where: {
       createdAt: {
         [Op.gt]: monthStart,
@@ -100,7 +99,7 @@ const countGeneratedKeys = async () => {
     },
   });
 
-  const prevShiftCount = await Carwash.count({
+  const prevShiftCount = await deviceData.count({
     where: {
       createdAt: {
         [Op.gt]: prevShiftStarts,
@@ -109,7 +108,7 @@ const countGeneratedKeys = async () => {
     },
   });
 
-  const currentShiftCount = await Carwash.count({
+  const currentShiftCount = await deviceData.count({
     where: {
       createdAt: {
         [Op.gt]: currentShiftStarts,
@@ -121,7 +120,7 @@ const countGeneratedKeys = async () => {
 };
 
 module.exports = {
-  checkCarWashKey,
+  checkKey,
   generateRandomNumber,
   generateKey,
   countGeneratedKeys,
