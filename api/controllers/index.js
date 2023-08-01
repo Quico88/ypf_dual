@@ -79,7 +79,10 @@ const countGeneratedKeys = async (deviceData) => {
     .subtract(utcDifference, "hours")
     .subtract(1, "days");
   const localTime = moment().subtract(utcDifference, "hours");
-  const monthStart = localTime.startOf("month");
+  console.log(now, "now");
+  console.log("local time is: ", localTime);
+  const monthStart = localTime.startOf("month").add(utcDifference, "hours");
+  console.log("month started on: ", monthStart);
   const hour = now.hour();
   const currentShift =
     hour < PMStart && hour > AMStart ? SHIFTS.morning : SHIFTS.afternoon;
