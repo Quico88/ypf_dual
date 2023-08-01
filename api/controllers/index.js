@@ -78,7 +78,7 @@ const countGeneratedKeys = async (deviceData) => {
   const yesterday = moment()
     .subtract(utcDifference, "hours")
     .subtract(1, "days");
-  const localTime = moment.subtract(utcDifference, "hours");
+  const localTime = moment().subtract(utcDifference, "hours");
   const monthStart = localTime.days(1).hours(0).minutes(0).seconds(0);
   const hour = now.hour();
   const currentShift =
