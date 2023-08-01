@@ -85,7 +85,9 @@ const countGeneratedKeys = async (deviceData) => {
   const currentShiftStarts =
     currentShift === SHIFTS.morning
       ? moment({ hour: AMStart, minute: 0, seconds: 0 })
-      : moment({ hour: PMStart, minute: 0, seconds: 0 });
+      : hour > 3
+      ? moment({ hour: PMStart, minute: 0, seconds: 0 })
+      : moment({ hour: PMStart, minute: 0, seconds: 0 }).subtract(1, "days");
 
   const prevShiftStarts =
     currentShift === SHIFTS.morning
