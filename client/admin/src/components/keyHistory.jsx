@@ -21,7 +21,7 @@ const KeyHistory = () => {
       moment(row.createdAt)
         .subtract(utcDifference, "hours")
         .format("DD/MM/YYYY")
-        .concat("_", moment(row.createdAt).hour() > 14 ? "tarde" : "mañana")
+        .concat("_", moment(row.createdAt).hour() >= 14 ? "tarde" : "mañana")
     );
 
     const counts = {};
