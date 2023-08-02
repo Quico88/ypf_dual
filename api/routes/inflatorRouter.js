@@ -13,11 +13,12 @@ module.exports = inflatorRouter;
 
 inflatorRouter.get("/:key", async (req, res) => {
   const { key } = req.params;
-  console.log(key);
   try {
     if (await checkKey(key, Inflator)) {
+      console.log("clave correcta");
       res.status(200).send("correct password");
     } else {
+      console.log("no se encontró la clave: ", key);
       res.status(404).send("password not found");
     }
   } catch (e) {
