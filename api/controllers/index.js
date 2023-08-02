@@ -31,6 +31,7 @@ const checkKey = async (key, deviceData) => {
         },
       }
     );
+    console.log("valid password");
     return true;
   } else return false;
 };
@@ -86,14 +87,16 @@ const countGeneratedKeys = async (deviceData) => {
   const currentShiftStarts =
     currentShift === SHIFTS.morning
       ? moment({ hour: AMStart, minute: 0, seconds: 0 })
-      : hour > 3
+      : hour >= 3
       ? moment({ hour: PMStart, minute: 0, seconds: 0 })
       : moment({ hour: PMStart, minute: 0, seconds: 0 }).subtract(1, "days");
 
   const prevShiftStarts =
     currentShift === SHIFTS.morning
       ? yesterday.hours(PMStart).minutes(0).seconds(0)
-      : moment({ hour: AMStart, minute: 0, seconds: 0 });
+      : hour >= 3
+      ? moment({ hour: AMStart, minute: 0, seconds: 0 })
+      : moment({ hour: AMStart, minute: 0, seconds: 0 }).subtract(1, "days");
 
   const MTDCount = await deviceData.count({
     where: {
