@@ -1,11 +1,13 @@
-import { Button, Modal, Popconfirm } from "antd";
+import { Button, Modal, Popconfirm, Row } from "antd";
 import Counter from "./counter";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 
 const DeviceCard = ({ name, url }) => {
   const [key, setKey] = useState(0);
   const [showCounterModal, setShowCounterModal] = useState(false);
+
+  const [lastKeys, setLastKeys] = useState([]);
 
   const [MTDCount, setMTDCount] = useState(0);
   const [currentShiftCount, setCurrentShiftCount] = useState(0);
@@ -19,6 +21,17 @@ const DeviceCard = ({ name, url }) => {
     setKey(parseInt(data.key));
     console.log("key: ", key);
   };
+
+  const latsKeysLength = 5;
+
+  useEffect(() => {
+    const keys = [...lastKeys];
+    if (key !== 0) keys.unshift(key);
+    if (keys.length > latsKeysLength + 1) {
+      keys.pop();
+    }
+    setLastKeys(keys);
+  }, [key]);
 
   const countKeys = async () => {
     let {
@@ -55,7 +68,8 @@ const DeviceCard = ({ name, url }) => {
           La clave generada es: 000
         </text>
       )}
-      <Button size='small' className='mt-16' onClick={toggleModal}>
+
+      <Button size='small' className='mt-10' onClick={toggleModal}>
         Aforo
       </Button>
       <Modal
@@ -73,6 +87,22 @@ const DeviceCard = ({ name, url }) => {
           prevShiftCount={prevShiftCount}
         />
       </Modal>
+      <Row>
+        <text className='text-xs mt-4'>Últimas claves generadas: </text>
+      </Row>
+      <Row>
+        <text className='text-xs mt-2 h-2'>
+          {lastKeys
+            ? lastKeys.map((elem, index) =>
+                index !== 0
+                  ? index !== latsKeysLength
+                    ? ` ${elem}, `
+                    : ` ${elem} `
+                  : ""
+              )
+            : null}
+        </text>
+      </Row>
     </div>
   );
 };
