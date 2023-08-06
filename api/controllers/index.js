@@ -66,7 +66,7 @@ const bringKeyCreationHisotry = async (deviceData) => {
         [Op.gt]: moment().subtract(monthsOfHistory, "months"),
       },
     },
-    attributes: ["createdAt"],
+    attributes: ["createdAt", "used"],
   });
   return data;
 };
