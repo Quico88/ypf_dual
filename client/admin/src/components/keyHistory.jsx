@@ -17,28 +17,34 @@ const KeyHistory = () => {
       data: { keyHistory },
     } = await axios.get(`${device}/key/history`);
 
-    const processedData = keyHistory.map((row) =>
-      moment(row.createdAt)
+    const processedData = keyHistory.map((row) => ({
+      date: moment(row.createdAt)
         .subtract(utcDifference, "hours")
-        .format("DD/MM/YYYY")
-        .concat("_", moment(row.createdAt).hour() >= 14 ? "tarde" : "mañana")
-    );
+        .format("DD/MM/YYYY"),
+      shift: moment(row.createdAt).hour() >= 14 ? "tarde" : "mañana",
+      used: row.used,
+    }));
 
-    const counts = {};
+    const countsTotal = {};
+    const countsUnused = {};
 
     processedData.forEach((x) => {
-      counts[x] = (counts[x] || 0) + 1;
+      countsTotal[`${x.date}_${x.shift}`] =
+        (countsTotal[`${x.date}_${x.shift}`] || 0) + 1;
+      if (!x.used) {
+        countsUnused[`${x.date}_${x.shift}`] =
+          (countsUnused[`${x.date}_${x.shift}`] || 0) + 1;
+      }
     });
 
     const orderedData = [];
 
-    console.log("row: ", counts);
-
-    for (let row in counts) {
+    for (let row in countsTotal) {
       orderedData.push({
         fecha: row.split("_")[0],
         turno: row.split("_")[1],
-        cant: counts[row],
+        cant: countsTotal[row],
+        cant_no_usada: countsUnused[row] || 0,
       });
     }
 
@@ -61,6 +67,10 @@ const KeyHistory = () => {
     {
       title: "Claves generadas",
       dataIndex: "cant",
+    },
+    {
+      title: "Claves no usadas",
+      dataIndex: "cant_no_usada",
     },
   ];
 
